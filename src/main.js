@@ -36,7 +36,10 @@ async function fetchAndDisplayPhotos(searchQuery, pageNumber) {
       hideLoadMoreButton();
       fetchPhotosButton.removeEventListener('click', onLoadMore);
     } else {
-      imgContainer.innerHTML += createMarkup(imagesData.hits);
+      imgContainer.insertAdjacentHTML(
+        'beforeend',
+        createMarkup(imagesData.hits)
+      );
 
       const lightbox = new SimpleLightbox('.gallery a', {
         captionsData: 'alt',
@@ -58,7 +61,12 @@ async function fetchAndDisplayPhotos(searchQuery, pageNumber) {
       }
     }
   } catch (error) {
-    console.log(error);
+    iziToast.error({
+      message:
+        'An error occurred while fetching and displaying photos. Please try again later.',
+      position: 'topCenter',
+      color: 'blue',
+    });
   } finally {
     loaderEl.classList.add('is-hidden');
   }
@@ -93,7 +101,12 @@ async function onSearch(event) {
     page = 1;
     await fetchAndDisplayPhotos(searchQuery, page);
   } catch (error) {
-    console.log(error);
+    iziToast.error({
+      message:
+        'An error occurred while fetching and displaying photos. Please try again later.',
+      position: 'topCenter',
+      color: 'red',
+    });
   } finally {
     event.target.reset();
     loaderEl.classList.add('is-hidden');
